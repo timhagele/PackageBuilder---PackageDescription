@@ -83,12 +83,7 @@ final class Version_1_3: XCTestCase {
 		else { throw URLError ( .badURL ) }
 	}
 	func test_builderAutomaticallyImportsMacroSupportWhenMacroPresent () throws {
-		
-		print()
-		print(builder1.dependencies [ 0 ].description )
-		print(builder1.dependencies [ 0 ].description )
-		print(builder1.dependencies [ 0 ].description )
-		print()
+	
 		if builder1.dependencies [ 0 ].description == ".package ( url: \"https://github.com/apple/swift-syntax.git\" , from: \"600.0.0-latest\" )" {}
 		else { throw URLError ( .badURL ) }
 	}
