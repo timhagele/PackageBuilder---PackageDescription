@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		22DBFDDC2E16592B004DF0D9 /* @main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DBFDDB2E16592B004DF0D9 /* @main.swift */; };
-		22DBFDF02E16B0FE004DF0D9 /* Macro External in Frameworks */ = {isa = PBXBuildFile; productRef = 22DBFDEF2E16B0FE004DF0D9 /* Macro External */; };
+		22DBFDF22E16DA00004DF0D9 /* Macros in Frameworks */ = {isa = PBXBuildFile; productRef = 22DBFDF12E16DA00004DF0D9 /* Macros */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,7 +22,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22DBFDF02E16B0FE004DF0D9 /* Macro External in Frameworks */,
+				22DBFDF22E16DA00004DF0D9 /* Macros in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,7 +71,7 @@
 			);
 			name = "PackageBuilder 1.3";
 			packageProductDependencies = (
-				22DBFDEF2E16B0FE004DF0D9 /* Macro External */,
+				22DBFDF12E16DA00004DF0D9 /* Macros */,
 			);
 			productName = "PackageBuilder 1.3";
 			productReference = 22DBFDD82E16592A004DF0D9 /* PackageBuilder 1.3.app */;
@@ -344,9 +344,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		22DBFDEF2E16B0FE004DF0D9 /* Macro External */ = {
+		22DBFDF12E16DA00004DF0D9 /* Macros */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = "Macro External";
+			productName = Macros;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

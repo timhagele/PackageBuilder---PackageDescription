@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import Macro_External
+import Macros
 
 @main
 struct PackageBuilder_1_3App: App {

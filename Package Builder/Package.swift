@@ -3,9 +3,8 @@
 
 import PackageDescription
 import CompilerPluginSupport
-import SQLite3
 
-//let SwiftSyntax         :  Target.Dependency   = .product 	( name: "SwiftSyntax" 								  , package: "swift-syntax" )
+//let SwiftSyntax : Target.Dependency = .product ( name: "SwiftSyntax" , package: "swift-syntax" )
 
 
 let platforms: [ SupportedPlatform 	] = [ .macOS ( .v10_15 ) , .iOS ( .v13 ) ]
@@ -22,6 +21,10 @@ PackageBuilder ( id: "Version 1.3" , platforms: platforms ) {
 		}
 	}
 }.package
+
+
+
+
 
 
 // MARK: - PackageBuilder: Version 1.3
