@@ -3,8 +3,8 @@ But it is good to finish what I start, I suppose.
 
 
 
-PackageDescription cannot import Custom Libraries, easily.
-This Library must be Copied&Pasted, evertime, onto the package.swift file...
+package.swift cannot import Custom Libraries, easily.
+This Library must be Copied&Pasted, everytime, onto the package.swift file...
 
 With the Library...
 
