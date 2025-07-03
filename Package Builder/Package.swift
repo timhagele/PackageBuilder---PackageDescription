@@ -97,8 +97,8 @@ extension Container {
 		}
 	}
 }
-
 public struct PackageBuilder: Container {
+	
 	private let swiftSyntaxPackage : Package.Dependency  = .package ( url: "https://github.com/apple/swift-syntax.git" , from: "600.0.0-latest" )
 	public var data				   : Data
 	private var macroSupport : Bool = false

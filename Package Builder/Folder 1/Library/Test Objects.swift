@@ -32,8 +32,14 @@ public struct Package {
 	let cLanguageStandard: String?
 	let cxxLanguageStandard: String?
 	
-	enum Dependency {
+	enum Dependency: CustomStringConvertible {
 		case package ( url: String , from: String )
+		var description: String {
+			switch self {
+			case .package ( url: let url , from: let from ):
+				".package ( url: \"\(url)\" , from: \"\(from)\" )"
+			}
+		}
 	}
 }
 struct SwiftVersion { }

@@ -87,7 +87,7 @@ public struct PackageBuilder: Container {
 	public var products		   : [ pdProducts  ] = [ ]
 	public var targets		   : [ pdTarget 	 ] = [ ]
 	public var assets			   : [ Addressable ]
-	private var dependencies : [ Package.Dependency ] = [ ]
+	internal var dependencies : [ Package.Dependency ] = [ ]
 	
 	
 	public init ( id: String , platforms: [ pdPlatforms ] , @Folder _ folders: () -> [ Addressable ] ) {

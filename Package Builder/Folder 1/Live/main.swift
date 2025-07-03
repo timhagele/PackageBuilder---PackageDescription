@@ -28,11 +28,15 @@ let a = builder
 
 
 print ( a.products.compactMap ( { $0.description  } ).joined ( separator: "\n\n" ) )
-print () ; print () 
+print () ; print ()
 print ( a.targets.compactMap ( { $0.description  } ).joined ( separator: "\n\n" ) )
+print () ; print ()
+
+//automatic connection to Macro Externals
+print ( #stringify( 1 + 4 ) )
 
 
-print ( #stringify( 1 + 4 ) )
-print ( #stringify( 1 + 4 ) )
-print ( #stringify( 1 + 4 ) )
-print ( #stringify( 1 + 4 ) )
+//automatic connection to Macro_Library
+let _: [StringifyMacro] = [ ]
+
+
