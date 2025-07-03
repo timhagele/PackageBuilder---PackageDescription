@@ -11,7 +11,7 @@ import SwiftUI
 struct PackageBuilder_1_3App: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+					Circle().frame ( width: 10 , height: 10 )
         }
     }
 }

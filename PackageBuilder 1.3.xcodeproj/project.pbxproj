@@ -7,19 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		22DBFDDC2E16592B004DF0D9 /* PackageBuilder_1_3App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DBFDDB2E16592B004DF0D9 /* PackageBuilder_1_3App.swift */; };
-		22DBFDDE2E16592B004DF0D9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DBFDDD2E16592B004DF0D9 /* ContentView.swift */; };
-		22DBFDE02E16592E004DF0D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22DBFDDF2E16592E004DF0D9 /* Assets.xcassets */; };
-		22DBFDE42E16592E004DF0D9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22DBFDE32E16592E004DF0D9 /* Preview Assets.xcassets */; };
+		22DBFDDC2E16592B004DF0D9 /* @main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DBFDDB2E16592B004DF0D9 /* @main.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		22DBFDD82E16592A004DF0D9 /* PackageBuilder 1.3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PackageBuilder 1.3.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		22DBFDDB2E16592B004DF0D9 /* PackageBuilder_1_3App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackageBuilder_1_3App.swift; sourceTree = "<group>"; };
-		22DBFDDD2E16592B004DF0D9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		22DBFDDF2E16592E004DF0D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		22DBFDE12E16592E004DF0D9 /* PackageBuilder_1_3.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PackageBuilder_1_3.entitlements; sourceTree = "<group>"; };
-		22DBFDE32E16592E004DF0D9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		22DBFDDB2E16592B004DF0D9 /* @main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "@main.swift"; sourceTree = "<group>"; };
+		22DBFDEB2E167ACD004DF0D9 /* Package Builder */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = "Package Builder"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,7 +30,8 @@
 		22DBFDCF2E16592A004DF0D9 = {
 			isa = PBXGroup;
 			children = (
-				22DBFDDA2E16592A004DF0D9 /* PackageBuilder 1.3 */,
+				22DBFDDB2E16592B004DF0D9 /* @main.swift */,
+				22DBFDEB2E167ACD004DF0D9 /* Package Builder */,
 				22DBFDD92E16592A004DF0D9 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -47,26 +42,6 @@
 				22DBFDD82E16592A004DF0D9 /* PackageBuilder 1.3.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		22DBFDDA2E16592A004DF0D9 /* PackageBuilder 1.3 */ = {
-			isa = PBXGroup;
-			children = (
-				22DBFDDB2E16592B004DF0D9 /* PackageBuilder_1_3App.swift */,
-				22DBFDDD2E16592B004DF0D9 /* ContentView.swift */,
-				22DBFDDF2E16592E004DF0D9 /* Assets.xcassets */,
-				22DBFDE12E16592E004DF0D9 /* PackageBuilder_1_3.entitlements */,
-				22DBFDE22E16592E004DF0D9 /* Preview Content */,
-			);
-			path = "PackageBuilder 1.3";
-			sourceTree = "<group>";
-		};
-		22DBFDE22E16592E004DF0D9 /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				22DBFDE32E16592E004DF0D9 /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -127,8 +102,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22DBFDE42E16592E004DF0D9 /* Preview Assets.xcassets in Resources */,
-				22DBFDE02E16592E004DF0D9 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,8 +112,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22DBFDDE2E16592B004DF0D9 /* ContentView.swift in Sources */,
-				22DBFDDC2E16592B004DF0D9 /* PackageBuilder_1_3App.swift in Sources */,
+				22DBFDDC2E16592B004DF0D9 /* @main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,10 +238,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "PackageBuilder 1.3/PackageBuilder_1_3.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"PackageBuilder 1.3/Preview Content\"";
 				DEVELOPMENT_TEAM = 7UYUR2J7AF;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -284,10 +254,10 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 13.7;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "Timmy.Toolbox-App-03-00.macOS-Demo-App.PackageBuilder-1-3";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -304,10 +274,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "PackageBuilder 1.3/PackageBuilder_1_3.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"PackageBuilder 1.3/Preview Content\"";
 				DEVELOPMENT_TEAM = 7UYUR2J7AF;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -322,10 +290,10 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 13.7;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "Timmy.Toolbox-App-03-00.macOS-Demo-App.PackageBuilder-1-3";
 				PRODUCT_NAME = "$(TARGET_NAME)";
