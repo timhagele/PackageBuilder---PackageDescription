@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		22DBFDDC2E16592B004DF0D9 /* @main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DBFDDB2E16592B004DF0D9 /* @main.swift */; };
+		22DBFDF02E16B0FE004DF0D9 /* Macro External in Frameworks */ = {isa = PBXBuildFile; productRef = 22DBFDEF2E16B0FE004DF0D9 /* Macro External */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +22,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22DBFDF02E16B0FE004DF0D9 /* Macro External in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -33,6 +35,7 @@
 				22DBFDDB2E16592B004DF0D9 /* @main.swift */,
 				22DBFDEB2E167ACD004DF0D9 /* Package Builder */,
 				22DBFDD92E16592A004DF0D9 /* Products */,
+				22DBFDEC2E16AD4B004DF0D9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -42,6 +45,13 @@
 				22DBFDD82E16592A004DF0D9 /* PackageBuilder 1.3.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		22DBFDEC2E16AD4B004DF0D9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -60,6 +70,9 @@
 			dependencies = (
 			);
 			name = "PackageBuilder 1.3";
+			packageProductDependencies = (
+				22DBFDEF2E16B0FE004DF0D9 /* Macro External */,
+			);
 			productName = "PackageBuilder 1.3";
 			productReference = 22DBFDD82E16592A004DF0D9 /* PackageBuilder 1.3.app */;
 			productType = "com.apple.product-type.application";
@@ -238,6 +251,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7UYUR2J7AF;
@@ -274,6 +288,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7UYUR2J7AF;
@@ -327,6 +342,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		22DBFDEF2E16B0FE004DF0D9 /* Macro External */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "Macro External";
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 22DBFDD02E16592A004DF0D9 /* Project object */;
 }
