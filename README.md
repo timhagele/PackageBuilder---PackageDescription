@@ -8,7 +8,7 @@ This Library must be Copied&Pasted, everytime, onto the package.swift file...
 
 With the Library...
 
-```
+```Swift
 let package: Package = PackageBuilder ( id: "Version 1.3" , platforms: platforms ) {
 Folder ( name: "Folder 1" , dependencies: [ ] ) {
 		Library ( id: "PackageBuilder" , path: "Library" , dependencies: [ ] )
@@ -24,7 +24,7 @@ Folder ( name: "Folder 1" , dependencies: [ ] ) {
 
 Without the library...
 
-```
+``````Swift
 let package2: Package = Package ( name: "Version 1.3"
 	, platforms: platforms
 	, products: [
