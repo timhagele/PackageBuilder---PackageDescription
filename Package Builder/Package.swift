@@ -26,9 +26,7 @@ PackageBuilder ( id: "Version 1.3" , platforms: platforms ) {
 }.package
 
 
-// TODO: Libraries will not import themselves
-
-
+// TODO: make Libraries not import themselves when claimed by enclosing folder
 
 // MARK: - PackageBuilder: Version 1.3
 // _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
@@ -42,7 +40,6 @@ PackageBuilder ( id: "Version 1.3" , platforms: platforms ) {
 **
 // Tests and Executable (Live) Targets will receive an automatic dependency to all Library/Macros inside of the same Folder/Container
 */
-
 
 public typealias pdPackage 					= Package
 public typealias pdPlatforms 				= SupportedPlatform
@@ -59,14 +56,15 @@ public protocol Targetable: Addressable {
 	func appendObjects 	( path : String , products : inout [ pdProducts ] , targets : inout [ pdTarget ] )
 }
 public protocol SharableLibrary {
-	var exportedDependencies: [ String ] { get }
+	var sharedWithTests: [ String ] { get }
+	var sharedWithExecutable: [ String ] { get }
 }
 
 public struct Data {
 	let id						: 	String
 	var path					: 	String
 	var dependencies	: [ pdTarget.Dependency ]
-	public init ( id: String , path: String?, dependencies: [ pdTarget.Dependency ] ) {
+	public init ( id: String , path: String? , dependencies: [ pdTarget.Dependency ] ) {
 		self.id = id
 		self.path = path ?? id
 		self.dependencies = dependencies
@@ -78,19 +76,23 @@ extension Container {
 	var containsMacros: Bool { self.assets.contains ( where: { $0 is Macro } ) }
 	
 	func initialize ( path: String? , products: inout [ pdProducts ] , targets: inout [ pdTarget ] , macroSupport: inout Bool ) {
-		let localLibraries = self.assets .compactMap { $0 as? SharableLibrary } .flatMap { $0.exportedDependencies } // maps ( libraries || Macro External || Macro Library )
-
+		let localLibraries_Tests: [ String ] = self.assets .compactMap { $0 as? SharableLibrary } .flatMap { $0.sharedWithTests } // maps ( libraries || Macro External )
+		let localLibraries_Live	: [ String ] = self.assets .compactMap { $0 as? SharableLibrary } .flatMap { $0.sharedWithExecutable } // maps ( libraries || Macro External )
+		var transformed_Tests		: [ pdTarget.Dependency ] { localLibraries_Tests.map { .byName ( name: $0 ) } }
+		var transformed_Live		: [ pdTarget.Dependency ] { localLibraries_Live .map { .byName ( name: $0 ) } }
 		for var asset in self.assets {
 			
 			if asset is Macro  { macroSupport = true } // Import Swift Syntax into Library as a Package.Dependency
 			asset.data.dependencies.append ( contentsOf: self.data.dependencies ) //asset inherits all user-defined-folder dependencies
 			
-			if !( asset is SharableLibrary ) { // Filters to only ( Executables and Tests targets )
-				let transformed: [ pdTarget.Dependency ] = localLibraries.map { .byName ( name: $0 ) } // from string to Target.Dependency
-				asset.data.dependencies.append ( contentsOf: transformed ) // Executables and Tests targets receive automatic dependencies to all Libraries && Macro Library && Macro External within same Folder/Container
+			if asset is Tests {
+				asset.data.dependencies.append ( contentsOf: transformed_Tests ) // Executables and Tests targets receive automatic dependencies to all Libraries && Macro Library && Macro External within same Folder/Container
+			}
+			if asset is Live {
+				asset.data.dependencies.append ( contentsOf: transformed_Live ) // Executables and Tests targets receive automatic dependencies to all Libraries && Macro Library && Macro External within same Folder/Container
 			}
 
-			if let folder = asset as? Container {
+			if var folder = asset as? Container {
 				folder.initialize ( path: "\( path != nil ? "\( path! )/" : "" )\( asset.data.path )" , products: &products , targets: &targets , macroSupport: &macroSupport ) // The current function for nested Folders/Containers
 			}
 			else if var target = asset as? Targetable {
@@ -103,12 +105,12 @@ extension Container {
 public struct PackageBuilder: Container {
 	
 	private let swiftSyntaxPackage : Package.Dependency  = .package ( url: "https://github.com/apple/swift-syntax.git" , from: "600.0.0-latest" )
-	public var data				   : Data
-	private var macroSupport : Bool = false
-	public let platforms	   : [ pdPlatforms ]
-	public var products		   : [ pdProducts  ] = [ ]
-	public var targets		   : [ pdTarget 	 ] = [ ]
-	public var assets			   : [ Addressable ]
+	public var data				   	: Data
+	private var macroSupport 	: Bool = false
+	public let platforms	   	: [ pdPlatforms ]
+	public var products		   	: [ pdProducts  ] = [ ]
+	public var targets		   	: [ pdTarget 	 	] = [ ]
+	public var assets			   	: [ Addressable ]
 	internal var dependencies : [ Package.Dependency ] = [ ]
 	
 	
@@ -122,7 +124,7 @@ public struct PackageBuilder: Container {
 	
 	var package: pdPackage {
 		pdPackage (
-			name: self.data.id  // TODO: - make conditional - first present library/macro
+			name: self.data.id
 			, defaultLocalization: nil
 			, platforms: self.platforms
 			, pkgConfig: nil
@@ -153,27 +155,34 @@ public struct Folder		: Container {
 
 @resultBuilder
 public struct Macro 		: Container , SharableLibrary {
-	public var exportedDependencies: [ String ] { self.assets.compactMap { ( $0 is MacroLibrary || $0 is MacroExternal || $0 is Library ) ? $0.data.id : nil } }
+	public var sharedWithTests: [ String ] { self.assets.compactMap { ( $0 is MacroLibrary || $0 is MacroExternal || $0 is Library ) ? $0.data.id : nil } }
+	public var sharedWithExecutable: [ String ] { self.assets.compactMap { ( $0 is MacroExternal || $0 is Library ) ? $0.data.id : nil } }
+
 	
 	public var assets			: [ Addressable ]
 	public var data				: Data
-	var libraryName				: pdTarget.Dependency { .byName ( name: self.assets[ 0 ].data.id ) }
-	var externalName			: pdTarget.Dependency { .byName ( name: self.assets[ 1 ].data.id ) }
+	var libraryName				: pdTarget.Dependency { .byName ( name: self.assets [ 0 ].data.id ) }
+	var externalName			: pdTarget.Dependency { .byName ( name: self.assets [ 1 ].data.id ) }
 	
-	public static func buildBlock ( _ library: MacroLibrary , _ external: MacroExternal ) -> ( library: MacroLibrary , external: MacroExternal ) {
-		return ( library: library , external: external )
+	public static func buildBlock ( _ library: MacroLibrary , _ external: MacroExternal , _ assets:  Addressable... ) -> ( library: MacroLibrary , external: MacroExternal , assets: [ Addressable ] ) {
+		return ( library: library , external: external , assets: assets )
 	}
 	
-	public init ( name: String , dependencies: [ pdTarget.Dependency ] = [ ] , @Macro _ assets: () -> ( library: MacroLibrary , external: MacroExternal ) ) {
+	public init ( name: String , dependencies: [ pdTarget.Dependency ] = [ ] , @Macro _ assets: () -> ( library: MacroLibrary , external: MacroExternal , assets: [ Addressable ] ) ) {
 		self.data = Data ( id: name , path: name , dependencies: dependencies )
 		self.assets = [ assets().library , assets().external ]
+		self.assets.append ( contentsOf: assets().assets )
 		self.assets [ 1 ].data.dependencies.append ( .byName ( name: assets().library.data.id ) )
 	}
 }
 
-public struct MacroLibrary : Targetable {
-	private let swiftCompilerPlugin	:  Target.Dependency   = .product 	( name: "SwiftCompilerPlugin" , package: "swift-syntax" )
-	private let swiftSyntaxMacros	  :  Target.Dependency   = .product 	( name: "SwiftSyntaxMacros" 	, package: "swift-syntax" )
+public struct MacroLibrary : SharableLibrary , Targetable {
+	public var sharedWithTests: [ String ] { [ self.data.id ] }
+	public var sharedWithExecutable: [ String ] { [ ] }
+
+	
+	private let swiftCompilerPlugin	:  pdTarget.Dependency   = .product 	( name: "SwiftCompilerPlugin" , package: "swift-syntax" )
+	private let swiftSyntaxMacros	  :  pdTarget.Dependency   = .product 	( name: "SwiftSyntaxMacros" 	, package: "swift-syntax" )
 	public var data : Data
 	
 	public init ( id: String , path: String? = nil , dependencies: [ pdTarget.Dependency ] = [ ] ) {
@@ -187,7 +196,9 @@ public struct MacroLibrary : Targetable {
 	}
 }
 
-public struct MacroExternal : Targetable {
+public struct MacroExternal : SharableLibrary , Targetable {
+	public var sharedWithTests: [ String ] { [ self.data.id ] }
+	public var sharedWithExecutable: [ String ] { [ self.data.id ] }
 	public var data : Data
 	
 	public init ( id: String , path: String? = nil , dependencies: [ pdTarget.Dependency ] = [ ] ) {
@@ -201,7 +212,8 @@ public struct MacroExternal : Targetable {
 }
 
 public struct Library : SharableLibrary , Targetable {
-	public var exportedDependencies: [ String ] { [ self.data.id ] }
+	public var sharedWithTests: [ String ] { [ self.data.id ] }
+	public var sharedWithExecutable: [ String ] { [ self.data.id ] }
 	
 	public var data : Data
 	
@@ -216,7 +228,7 @@ public struct Library : SharableLibrary , Targetable {
 }
 
 public struct Tests : Targetable {
-	private let macrosTestSupport : Target.Dependency = .product ( name: "SwiftSyntaxMacrosTestSupport" , package: "swift-syntax" )
+	private let macrosTestSupport : pdTarget.Dependency = .product ( name: "SwiftSyntaxMacrosTestSupport" , package: "swift-syntax" )
 	public var data : Data
 
 	public init ( id: String , path: String? = nil , dependencies: [ pdTarget.Dependency ] = [ ] ) {
@@ -230,6 +242,7 @@ public struct Tests : Targetable {
 }
 
 public struct Live : Targetable {
+
 	public var data : Data
 	
 	public init ( id: String , path: String? = nil , dependencies: [ pdTarget.Dependency ] = [ ] ) {
@@ -241,7 +254,5 @@ public struct Live : Targetable {
 		targets.append 	( .executableTarget ( name: self.data.id , dependencies: self.data.dependencies , path: path ) )
 	}
 }
-
-
 
 
