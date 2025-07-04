@@ -15,17 +15,22 @@ import Swift
 final class Version_1_3: XCTestCase {
 	var builder1: PackageBuilder {
 		PackageBuilder ( id: "Version 1.3" , platforms: [ ] ) {
-			Folder(name: "Folder 1", dependencies: [ "!@!" ] ) {
-				Library ( id: "PackageBuilder"         , path: "Library" , dependencies: [ ] )
-				Live    ( id: "PackageBuilder_Live"    , path: "Live"    , dependencies: [ ] )
-				Tests   ( id: "PackageBuilder_Tests"   , path: "Tests"   , dependencies: [ ] )
-				Macro   ( name: "Macros" , dependencies: [ ] ) {
+			Folder ( name: "Folder 1", dependencies: [ "!@!" ] ) {
+				Library ( id: "PackageBuilder"         		, path: "Library" , dependencies: [ ] )
+				Live    ( id: "PackageBuilder_Live"    		, path: "Live"    , dependencies: [ ] )
+				Tests   ( id: "PackageBuilder_Tests"   		, path: "Tests"   , dependencies: [ ] )
+				Macro   ( name: "Macros" 							 		, dependencies: [ ] ) {
 					MacroLibrary 	( id: "Macro Library"  , path: nil       , dependencies: [ ] )
 					MacroExternal ( id: "Macro External" , path: nil       , dependencies: [ ] )
+					Library ( id: "Nested Library" )
+					Tests   ( id: "Nested Tests"   )
+					Live    ( id: "Nested Tests"   )
 				}
-				Folder ( name: "Folder 2" , dependencies: [ ] ) {
+				Folder 	( name: "Folder 2" 						 		, dependencies: [ ] ) {
 					Tests ( id: "Test Target 2" , path: nil , dependencies: [  ] )
 				}
+				Tests ( id: "Test Target 2" , path: nil , dependencies: [  ] )
+
 			}
 			Folder ( name: "Folder 3" , dependencies: [ ] ) {
 				Tests ( id: "Test Target 3", path: nil , dependencies: [  ] )
@@ -41,7 +46,7 @@ final class Version_1_3: XCTestCase {
 		}
 	}
 	
-
+	
 
 	func testExample() throws {
 		print ( "\n\n" )
@@ -60,7 +65,7 @@ final class Version_1_3: XCTestCase {
 		else { throw URLError ( .badURL ) }
 	}
 	func test_TestsDoNotReceiveAutomaticDependencyToLibrariesLocatedOutsideOfSameFolder () throws {
-		if builder1.targets[ 6 ].description.contains ( "dependencies: [] " ) { }
+		if builder1.targets[ 10 ].description.contains ( "dependencies: [] " ) { }
 		else { throw URLError ( .badURL ) }
 	}
 	func test_FolderDependenciesAreDistributedToEverFolderAsset () throws {
@@ -92,5 +97,8 @@ final class Version_1_3: XCTestCase {
 		if builder2.dependencies.isEmpty {}
 		else { throw URLError ( .badURL ) }
 	}
-	
+	func test_ () throws {
+		if builder2.dependencies.isEmpty {}
+		else { throw URLError ( .badURL ) }
+	}
 }

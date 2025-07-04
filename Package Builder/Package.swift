@@ -26,7 +26,7 @@ PackageBuilder ( id: "Version 1.3" , platforms: platforms ) {
 }.package
 
 
-
+// TODO: Libraries will not import themselves
 
 
 
