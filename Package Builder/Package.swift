@@ -7,6 +7,24 @@ import CompilerPluginSupport
 //let SwiftSyntax : Target.Dependency = .product ( name: "SwiftSyntax" , package: "swift-syntax" )
 
 
+// TODO: Macro() does not pass down dependencies to sub libraries
+// BUG: Macro() does not pass down dependencies to sub libraries
+
+// TODO: Macro() does not pass down dependencies to sub libraries
+// BUG: Macro() does not pass down dependencies to sub libraries
+
+// TODO: Macro() does not pass down dependencies to sub libraries
+// BUG: Macro() does not pass down dependencies to sub libraries
+
+// TODO: Macro() does not pass down dependencies to sub libraries
+// BUG: Macro() does not pass down dependencies to sub libraries
+
+// TODO: Macro() does not pass down dependencies to sub libraries
+// BUG: Macro() does not pass down dependencies to sub libraries
+
+//WRITE TEST
+
+
 let platforms: [ SupportedPlatform 	] = [ .macOS ( .v10_15 ) , .iOS ( .v13 ) ]
 
 let package: Package =
