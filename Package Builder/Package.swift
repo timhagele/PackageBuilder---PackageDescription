@@ -7,35 +7,20 @@ import CompilerPluginSupport
 //let SwiftSyntax : Target.Dependency = .product ( name: "SwiftSyntax" , package: "swift-syntax" )
 
 
-// TODO: Macro() does not pass down dependencies to sub libraries
-// BUG: Macro() does not pass down dependencies to sub libraries
 
-// TODO: Macro() does not pass down dependencies to sub libraries
-// BUG: Macro() does not pass down dependencies to sub libraries
-
-// TODO: Macro() does not pass down dependencies to sub libraries
-// BUG: Macro() does not pass down dependencies to sub libraries
-
-// TODO: Macro() does not pass down dependencies to sub libraries
-// BUG: Macro() does not pass down dependencies to sub libraries
-
-// TODO: Macro() does not pass down dependencies to sub libraries
-// BUG: Macro() does not pass down dependencies to sub libraries
-
-//WRITE TEST
 
 
 let platforms: [ SupportedPlatform 	] = [ .macOS ( .v10_15 ) , .iOS ( .v13 ) ]
 
 let package: Package =
 PackageBuilder ( id: "Version 1.3" , platforms: platforms ) {
-	Folder ( name: "Folder 1" 																 , dependencies: [ ] ) {
-		Library ( id: "PackageBuilder"         , path: "Library" , dependencies: [ ] )
-		Live    ( id: "PackageBuilder_Live"    , path: "Live"    , dependencies: [ ] )
-		Tests   ( id: "PackageBuilder_Tests"   , path: "Tests"   , dependencies: [ ] )
-		Macro   ( name: "Macros" 																 , dependencies: [ ] ) {
-			MacroLibrary 	( id: "Macro Library"  , path: nil       , dependencies: [ ] )
-			MacroExternal ( id: "Macros" 				 , path: nil       , dependencies: [ ] )
+	Folder ( name: "Folder 1" 																  ) {
+		Library ( id: "PackageBuilder"         , path: "Library"  )
+		Live    ( id: "PackageBuilder_Live"    , path: "Live"     )
+		Tests   ( id: "PackageBuilder_Tests"   , path: "Tests"    )
+		Macro   ( name: "Macros" 																  ) {
+			MacroLibrary 	( id: "Macro Library"  							      )
+			MacroExternal ( id: "Macros" 				 							      )
 		}
 	}
 }.package
@@ -55,7 +40,7 @@ PackageBuilder ( id: "Version 1.3" , platforms: platforms ) {
 **    May you find forgiveness for yourself and forgive others.
 **    May you share freely, never taking more than you give.
 **
-// Tests and Executable (Live) Targets will receive an automatic dependency to all Library/Macro inside of the same Folder/Container
+// Tests and Executable (Live) Targets will receive an automatic dependency to all Library/Macros inside of the same Folder/Container
 */
 
 
@@ -160,7 +145,7 @@ public struct Folder		: Container {
 	public static func buildBlock ( _ components: Addressable... ) -> [ Addressable ] {
 		components
 	}
-	public init ( name: String , dependencies: [ pdTarget.Dependency ] , @Folder _ assets: () -> [ Addressable ] ) {
+	public init ( name: String , dependencies: [ pdTarget.Dependency ] = [ ] , @Folder _ assets: () -> [ Addressable ] ) {
 		self.data = Data ( id: name , path: name , dependencies: dependencies )
 		self.assets = assets()
 	}
@@ -179,22 +164,20 @@ public struct Macro 		: Container , SharableLibrary {
 		return ( library: library , external: external )
 	}
 	
-	public init ( name: String , dependencies: [ pdTarget.Dependency ] , @Macro _ assets: () -> ( library: MacroLibrary , external: MacroExternal ) ) {
-		self.data = Data ( id: name , path: name , dependencies: [ ] )
-		let externalDependents: pdTarget.Dependency = .byName ( name: assets().library.data.id )
-		var external: MacroExternal = assets().external
-		external.data.dependencies.append ( externalDependents )
-		self.assets = [ assets().library , external ]
+	public init ( name: String , dependencies: [ pdTarget.Dependency ] = [ ] , @Macro _ assets: () -> ( library: MacroLibrary , external: MacroExternal ) ) {
+		self.data = Data ( id: name , path: name , dependencies: dependencies )
+		self.assets = [ assets().library , assets().external ]
+		self.assets [ 1 ].data.dependencies.append ( .byName ( name: assets().library.data.id ) )
 	}
 }
 
 public struct MacroLibrary : Targetable {
-	private let SwiftCompilerPlugin	:  Target.Dependency   = .product 	( name: "SwiftCompilerPlugin" , package: "swift-syntax" )
-	private let SwiftSyntaxMacros	  :  Target.Dependency   = .product 	( name: "SwiftSyntaxMacros" 	, package: "swift-syntax" )
+	private let swiftCompilerPlugin	:  Target.Dependency   = .product 	( name: "SwiftCompilerPlugin" , package: "swift-syntax" )
+	private let swiftSyntaxMacros	  :  Target.Dependency   = .product 	( name: "SwiftSyntaxMacros" 	, package: "swift-syntax" )
 	public var data : Data
 	
-	public init ( id: String , path: String? , dependencies: [ pdTarget.Dependency ] ) {
-		var macroSupport: [ pdTarget.Dependency ] = [ self.SwiftSyntaxMacros , self.SwiftCompilerPlugin ]
+	public init ( id: String , path: String? = nil , dependencies: [ pdTarget.Dependency ] = [ ] ) {
+		var macroSupport: [ pdTarget.Dependency ] = [ self.swiftSyntaxMacros , self.swiftCompilerPlugin ]
 		macroSupport.append ( contentsOf: dependencies )
 		self.data = Data ( id: id , path: path , dependencies: macroSupport )
 	}
@@ -207,7 +190,7 @@ public struct MacroLibrary : Targetable {
 public struct MacroExternal : Targetable {
 	public var data : Data
 	
-	public init ( id: String , path: String? , dependencies: [ pdTarget.Dependency ] ) {
+	public init ( id: String , path: String? = nil , dependencies: [ pdTarget.Dependency ] = [ ] ) {
 		self.data = Data ( id: id , path: path , dependencies: dependencies )
 	}
 	
@@ -222,7 +205,7 @@ public struct Library : SharableLibrary , Targetable {
 	
 	public var data : Data
 	
-	public init ( id: String , path: String? , dependencies: [ pdTarget.Dependency ] ) {
+	public init ( id: String , path: String? = nil , dependencies: [ pdTarget.Dependency ] = [ ] ) {
 		self.data = Data ( id: id , path: path , dependencies: dependencies )
 	}
 	
@@ -236,7 +219,7 @@ public struct Tests : Targetable {
 	private let macrosTestSupport : Target.Dependency = .product ( name: "SwiftSyntaxMacrosTestSupport" , package: "swift-syntax" )
 	public var data : Data
 
-	public init ( id: String , path: String? , dependencies: [ pdTarget.Dependency ] ) {
+	public init ( id: String , path: String? = nil , dependencies: [ pdTarget.Dependency ] = [ ] ) {
 		self.data = Data ( id: id , path: path , dependencies: dependencies )
 	}
 	
@@ -249,7 +232,7 @@ public struct Tests : Targetable {
 public struct Live : Targetable {
 	public var data : Data
 	
-	public init ( id: String , path: String? , dependencies: [ pdTarget.Dependency ] ) {
+	public init ( id: String , path: String? = nil , dependencies: [ pdTarget.Dependency ] = [ ] ) {
 		self.data = Data ( id: id , path: path , dependencies: dependencies )
 	}
 	

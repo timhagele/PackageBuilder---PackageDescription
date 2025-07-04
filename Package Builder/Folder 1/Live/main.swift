@@ -7,21 +7,18 @@
 
 import Foundation
 import PackageBuilder
-//import Macro_Library
-//import Macros
+import Macro_Library
+import Macros
 
 var builder: PackageBuilder {
 	PackageBuilder ( id: "Version 1.3" , platforms: [ ] ) {
-		Folder(name: "Folder 1", dependencies: [ ] ) {
-			Library ( id: "PackageBuilder"         , path: "Library" , dependencies: [ ] )
-			Live    ( id: "PackageBuilder_Live"    , path: "Live"    , dependencies: [ ] )
-			Tests   ( id: "PackageBuilder_Tests"   , path: "Tests"   , dependencies: [ ] )
-			Macro   ( name: "Macros" , dependencies: [ "MACROMACROMACROMACROMACRO" ] ) {
-				MacroLibrary 	( id: "Macro Library"  , path: nil       , dependencies: [ ] )
-				MacroExternal ( id: "Macro External" , path: nil       , dependencies: [ ] )
-			}
-			Folder(name: "Folder 2", dependencies: [ "alksdjfh;laksdfkasdjf;asdfd" ] ) {
-				Library ( id: "PackageBuilder"         , path: "Library" , dependencies: [ ] )
+		Folder ( name: "Folder 1" , dependencies: [ ] ) {
+			Library ( id: "PackageBuilder"         , path: "Library" 	)
+			Live    ( id: "PackageBuilder_Live"    , path: "Live"    	)
+			Tests   ( id: "PackageBuilder_Tests"   , path: "Tests"   	)
+			Macro   ( name: "Macros" , dependencies: [ "Macro" ] 	 		) {
+				MacroLibrary 	( id: "Macro Library"   					      	)
+				MacroExternal ( id: "Macro External"  					      	)
 			}
 		}
 	}
@@ -37,10 +34,12 @@ print ( a.targets.compactMap ( { $0.description  } ).joined ( separator: "\n\n" 
 print () ; print ()
 
 //automatic connection to Macro Externals
-//print ( #stringify( 1 + 4 ) )
+print ( #stringify( 1 + 4 ) )
 
 
-////automatic connection to Macro_Library
+
+//printTest()
+//automatic connection to Macro_Library
 //let _: [StringifyMacro] = [ ]
 
 
