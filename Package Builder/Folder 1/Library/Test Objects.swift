@@ -32,9 +32,9 @@ public struct Package {
 	let cLanguageStandard: String?
 	let cxxLanguageStandard: String?
 	
-	enum Dependency: CustomStringConvertible {
+	public enum Dependency: CustomStringConvertible {
 		case package ( url: String , from: String )
-		var description: String {
+		public var description: String {
 			switch self {
 			case .package ( url: let url , from: let from ):
 				".package ( url: \"\(url)\" , from: \"\(from)\" )"

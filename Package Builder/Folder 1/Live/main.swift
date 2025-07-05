@@ -6,12 +6,13 @@
 //
 
 import Foundation
-import PackageBuilder
-import Macro_Library
-import Macros
+@testable import PackageBuilder
+@testable import Macros
 
 var builder: PackageBuilder {
-	PackageBuilder ( id: "Version 1.3" , platforms: [ ] ) {
+	PackageBuilder ( id: "Version 1.3" , platforms: [ ] , dependencies: {
+		Package.Dependency.package(url: "URL", from: "URL")
+	} , assets: {
 		Folder ( name: "Folder 1" , dependencies: [ "!@!@!@!@!@!" ] ) {
 			Library ( id: "PackageBuilder"         , path: "Library" 	)
 			Live    ( id: "PackageBuilder_Live"    , path: "Live"    	)
@@ -19,30 +20,18 @@ var builder: PackageBuilder {
 			Macro   ( name: "Macros" 															 		) {
 				MacroLibrary 	( id: "Macro Library"   					      	)
 				MacroExternal ( id: "Macro External"  					      	)
-//				Library ( id: "Nested Library" , path: nil , dependencies: [ ] )
+				Library ( id: "Nested Library" , path: nil , dependencies: [ ] )
 				Tests ( id: "Nested Test" )
 				Live 	( id: "Nested Live" )
 			}
 		}
-	}
+	} )
 }
 
 
-let a = builder
+let package = builder.package
 
-
-print ( a.products.compactMap ( { $0.description  } ).joined ( separator: "\n\n" ) )
-print () ; print ()
-print ( a.targets.compactMap ( { $0.description  } ).joined ( separator: "\n\n" ) )
-print () ; print ()
-
+package.printPackage()
 //automatic connection to Macro Externals
-print ( #stringify( 1 + 4 ) )
-
-
-
-//printTest()
-//automatic connection to Macro_Library
-//let _: [StringifyMacro] = [ ]
-
+//print ( #stringify( 1 + 4 ) )
 

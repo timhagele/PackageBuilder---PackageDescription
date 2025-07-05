@@ -7,6 +7,8 @@
 
 import Foundation
 
+// TODO: make Libraries not import themselves when claimed by enclosing folder
+
 // MARK: - PackageBuilder: Version 1.3
 // _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 /*
@@ -19,7 +21,6 @@ import Foundation
 **
 // Tests and Executable (Live) Targets will receive an automatic dependency to all Library/Macros inside of the same Folder/Container
 */
-
 
 public typealias pdPackage 					= Package
 public typealias pdPlatforms 				= SupportedPlatform
@@ -56,26 +57,25 @@ extension Container {
 	var containsMacros: Bool { self.assets.contains ( where: { $0 is Macro } ) }
 	
 	func initialize ( path: String? , products: inout [ pdProducts ] , targets: inout [ pdTarget ] , macroSupport: inout Bool ) {
+		
 		let localLibraries_Tests: [ String ] = self.assets .compactMap { $0 as? SharableLibrary } .flatMap { $0.sharedWithTests } // maps ( libraries || Macro External )
 		let localLibraries_Live	: [ String ] = self.assets .compactMap { $0 as? SharableLibrary } .flatMap { $0.sharedWithExecutable } // maps ( libraries || Macro External )
 		var transformed_Tests		: [ pdTarget.Dependency ] { localLibraries_Tests.map { .byName ( name: $0 ) } }
 		var transformed_Live		: [ pdTarget.Dependency ] { localLibraries_Live .map { .byName ( name: $0 ) } }
+		
 		for var asset in self.assets {
 			
 			if asset is Macro  { macroSupport = true } // Import Swift Syntax into Library as a Package.Dependency
 			asset.data.dependencies.append ( contentsOf: self.data.dependencies ) //asset inherits all user-defined-folder dependencies
 			
 			if asset is Tests {
-//				let transformed: [ pdTarget.Dependency ] = localLibraries_Tests.map { .byName ( name: $0 ) } // Transformed from String to Target.Dependency
 				asset.data.dependencies.append ( contentsOf: transformed_Tests ) // Executables and Tests targets receive automatic dependencies to all Libraries && Macro Library && Macro External within same Folder/Container
 			}
 			if asset is Live {
-//				let transformed: [ pdTarget.Dependency ] = localLibraries_Live.map { .byName ( name: $0 ) } // Transformed from String to Target.Dependency
 				asset.data.dependencies.append ( contentsOf: transformed_Live ) // Executables and Tests targets receive automatic dependencies to all Libraries && Macro Library && Macro External within same Folder/Container
 			}
 
-			if var folder = asset as? Container {
-				folder.data.dependencies.append ( contentsOf: transformed_Tests )
+			if let folder = asset as? Container {
 				folder.initialize ( path: "\( path != nil ? "\( path! )/" : "" )\( asset.data.path )" , products: &products , targets: &targets , macroSupport: &macroSupport ) // The current function for nested Folders/Containers
 			}
 			else if var target = asset as? Targetable {
@@ -85,8 +85,9 @@ extension Container {
 		}
 	}
 }
+@resultBuilder
 public struct PackageBuilder: Container {
-	
+	public static func buildBlock(_ components: Package.Dependency...) -> [ Package.Dependency ] { components }
 	private let swiftSyntaxPackage : Package.Dependency  = .package ( url: "https://github.com/apple/swift-syntax.git" , from: "600.0.0-latest" )
 	public var data				   	: Data
 	private var macroSupport 	: Bool = false
@@ -94,13 +95,14 @@ public struct PackageBuilder: Container {
 	public var products		   	: [ pdProducts  ] = [ ]
 	public var targets		   	: [ pdTarget 	 	] = [ ]
 	public var assets			   	: [ Addressable ]
-	internal var dependencies : [ Package.Dependency ] = [ ]
+	internal var dependencies : [ Package.Dependency ]
 	
 	
-	public init ( id: String , platforms: [ pdPlatforms ] , @Folder _ folders: () -> [ Addressable ] ) {
+	public init ( id: String , platforms: [ pdPlatforms ] , @PackageBuilder dependencies: () -> [ Package.Dependency ] , @Folder assets: () -> [ Addressable ] ) {
 		self.data = Data ( id: id , path: nil , dependencies: [ ] )
 		self.platforms = platforms
-		self.assets = folders ( )
+		self.assets = assets ( )
+		self.dependencies = dependencies()
 		self.initialize ( path: nil , products: &self.products , targets: &self.targets , macroSupport: &self.macroSupport )
 		if self.macroSupport { self.dependencies.append ( swiftSyntaxPackage ) }
 	}
